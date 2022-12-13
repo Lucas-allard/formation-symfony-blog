@@ -7,12 +7,17 @@ use App\Entity\Post;
 use App\Repository\CategoryRepository;
 use App\Repository\PostRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class PostController extends AbstractController
 {
-    public function __construct(private readonly CategoryRepository $categoryRepository)
+    /**
+     * @param CategoryRepository $categoryRepository
+     * @param PostRepository $postRepository
+     */
+    public function __construct(private readonly CategoryRepository $categoryRepository, private readonly PostRepository $postRepository)
     {
     }
 
@@ -22,12 +27,12 @@ class PostController extends AbstractController
      * @return Response
      */
     #[Route('/', name: 'home')]
-    public function index(PostRepository $postRepository): Response
+    public function index(): Response
     {
 
         return $this->render('home/index.html.twig', [
             'categories' => $this->categoryRepository->findAll(),
-            'posts' => $postRepository->findAll(),
+            'posts' => $this->postRepository->findAll(),
         ]);
     }
 
@@ -40,8 +45,24 @@ class PostController extends AbstractController
     {
 
         return $this->render('post/showByCategory.html.twig', [
-            'categories' =>  $this->categoryRepository->findAll(),
+            'categories' => $this->categoryRepository->findAll(),
             'posts' => $category->getPosts(),
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @return Response
+     */
+    #[Route('/post/search/', name: 'index_by_search', methods: ['POST'])]
+    public function showSearchResult(Request $request): Response
+    {
+        $searchValue = $request->request->get("search");
+        $posts = $this->postRepository->findBySearch($searchValue);
+
+        return $this->render('post/showBySearch.html.twig', [
+            'categories' => $this->categoryRepository->findAll(),
+            'post' => $posts
         ]);
     }
 
