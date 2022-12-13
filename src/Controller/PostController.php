@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Category;
 use App\Entity\Post;
 use App\Repository\CategoryRepository;
 use App\Repository\PostRepository;
@@ -26,14 +27,19 @@ class PostController extends AbstractController
         ]);
     }
 
-    #[Route('/post/{category}', name: 'home')]
-    public function showByCategory(CategoryRepository $categoryRepository, PostRepository $postRepository): Response
+    /**
+     * @param CategoryRepository $categoryRepository
+     * @param Category $category
+     * @return Response
+     */
+    #[Route('/post/category/{id<[0-9]+>}/', name: 'index_by_category')]
+    public function showByCategory(CategoryRepository $categoryRepository,Category $category): Response
     {
 
-//        return $this->render('home/index.html.twig', [
-//            'categories' => $categoryRepository->findAll(),
-//            'posts' => $postRepository->findAll(),
-//        ]);
+        return $this->render('post/showByCategory.html.twig', [
+            'categories' => $categoryRepository->findAll(),
+            'posts' => $category->getPosts(),
+        ]);
     }
 
     /**

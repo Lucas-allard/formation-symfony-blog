@@ -9,7 +9,6 @@ use Faker;
 
 class CategoryFixtures extends Fixture
 {
-    public const CATEGORY_REFERENCE = 'category';
 
     public function load(ObjectManager $manager): void
     {
@@ -19,11 +18,12 @@ class CategoryFixtures extends Fixture
             $category = new Category();
             $category->setName($faker->word());
             $manager->persist($category);
+
+            $this->addReference('category' . $c, $category);
         }
 
         $manager->flush();
 
-        $this->addReference(self::CATEGORY_REFERENCE, $category);
 
     }
 }

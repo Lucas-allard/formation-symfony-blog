@@ -32,7 +32,6 @@ class Post
     #[ORM\OneToMany(mappedBy: 'post', targetEntity: Comment::class, orphanRemoval: true)]
     private Collection $comments;
 
-
     #[ORM\ManyToOne(inversedBy: 'posts')]
     private ?User $user = null;
 
