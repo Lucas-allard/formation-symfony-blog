@@ -12,32 +12,35 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class PostController extends AbstractController
 {
+    public function __construct(private readonly CategoryRepository $categoryRepository)
+    {
+    }
+
+
     /**
-     * @param CategoryRepository $categoryRepository
      * @param PostRepository $postRepository
      * @return Response
      */
     #[Route('/', name: 'home')]
-    public function index(CategoryRepository $categoryRepository, PostRepository $postRepository): Response
+    public function index(PostRepository $postRepository): Response
     {
 
         return $this->render('home/index.html.twig', [
-            'categories' => $categoryRepository->findAll(),
+            'categories' => $this->categoryRepository->findAll(),
             'posts' => $postRepository->findAll(),
         ]);
     }
 
     /**
-     * @param CategoryRepository $categoryRepository
      * @param Category $category
      * @return Response
      */
     #[Route('/post/category/{id<[0-9]+>}/', name: 'index_by_category')]
-    public function showByCategory(CategoryRepository $categoryRepository,Category $category): Response
+    public function showByCategory(Category $category): Response
     {
 
         return $this->render('post/showByCategory.html.twig', [
-            'categories' => $categoryRepository->findAll(),
+            'categories' =>  $this->categoryRepository->findAll(),
             'posts' => $category->getPosts(),
         ]);
     }
