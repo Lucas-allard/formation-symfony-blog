@@ -4,7 +4,16 @@
 
 {% block body %}
 
-    <h1 class="text-center mt-4">Liste des derniers articles</h1>
+    <h2>Liste des catégories</h2>
+    <div class="container">
+        {% for category in categories %}
+            <a href="">
+                <span class="badge bg-dark">{{ category.name }}</span>
+            </a>
+        {% endfor %}
+    </div>
+
+    <h2 class="text-center mt-4">Liste des derniers articles</h2>
     <div class="container blog-page mt-5">
         <div class="row clearfix">
             {% for post in posts %}
@@ -33,8 +42,8 @@
                                 <img src='{{ post.img }}' alt="Awesome Image">
                             </div>
                             <p>{{ post.body | slice(0, 100) }}...</p>
-{#                            <a href="{{ path("post/".{post.id}) }}" title="read more"#}
-{#                               class="btn btn-round btn-info">Read More</a>#}
+                            <a href="{{ path("post",post.id) }}" title="read more"
+                               class="btn btn-round btn-info">Read More</a>
                         </div>
                     </div>
                 </div>

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Post;
+use App\Repository\CategoryRepository;
 use App\Repository\PostRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,16 +12,28 @@ use Symfony\Component\Routing\Annotation\Route;
 class PostController extends AbstractController
 {
     /**
+     * @param CategoryRepository $categoryRepository
      * @param PostRepository $postRepository
      * @return Response
      */
     #[Route('/', name: 'home')]
-    public function index(PostRepository $postRepository): Response
+    public function index(CategoryRepository $categoryRepository, PostRepository $postRepository): Response
     {
 
         return $this->render('home/index.html.twig', [
-            'posts' => $postRepository->findAll()
+            'categories' => $categoryRepository->findAll(),
+            'posts' => $postRepository->findAll(),
         ]);
+    }
+
+    #[Route('/post/{category}', name: 'home')]
+    public function showByCategory(CategoryRepository $categoryRepository, PostRepository $postRepository): Response
+    {
+
+//        return $this->render('home/index.html.twig', [
+//            'categories' => $categoryRepository->findAll(),
+//            'posts' => $postRepository->findAll(),
+//        ]);
     }
 
     /**
