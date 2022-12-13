@@ -33,8 +33,8 @@
                                 <img src='{{ post.img }}' alt="Awesome Image">
                             </div>
                             <p>{{ post.body | slice(0, 100) }}...</p>
-                            <a href="{{ path("post", {"postId" : post.id}) }}" title="read more"
-                               class="btn btn-round btn-info">Read More</a>
+{#                            <a href="{{ path("post/".{post.id}) }}" title="read more"#}
+{#                               class="btn btn-round btn-info">Read More</a>#}
                         </div>
                     </div>
                 </div>
