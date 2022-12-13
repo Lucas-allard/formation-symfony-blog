@@ -27,7 +27,7 @@ class PostController extends AbstractController
      * @param Post $post
      * @return Response
      */
-    #[Route('/post/{id}', name: 'post')]
+    #[Route('/post/{id<[0-9]+>}', name: 'post')]
     public function show(Post $post): Response
     {
 
