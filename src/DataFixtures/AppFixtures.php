@@ -41,7 +41,7 @@ class AppFixtures extends Fixture
                     ->setTitle($faker->words(rand(3, 10), true))
                     ->setBody($faker->paragraphs(rand(2, 5), true))
                     ->setAuthor($faker->name())
-                    ->setImg("https://placeimg.com/300/300/any");
+                    ->setImg($faker->imageUrl(640, 480, 'animals', true));
 
                 $manager->persist($post);
 
