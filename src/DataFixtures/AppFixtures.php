@@ -8,11 +8,14 @@ use App\Entity\Post;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Faker;
 
 class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
+        $faker = Faker\Factory::create('fr_FR');
+
         $userAdmin = new User();
         $userAdmin->setEmail('admin@symblog.com')
             ->setPassword('password');
@@ -22,11 +25,11 @@ class AppFixtures extends Fixture
 
         for ($c = 0; $c < 5; $c++) {
             $category = new Category();
-            $category->setName("catégorie " . $c);
+            $category->setName($faker->words(rand(3, 10), true));
             $manager->persist($category);
 
             $user = new User();
-            $user->setEmail("user-" . $c . "@symblog.com")
+            $user->setEmail($faker->email())
                 ->setPassword('password');
 
             $manager->persist($user);
@@ -35,8 +38,10 @@ class AppFixtures extends Fixture
             for ($p = 0; $p < 10; $p++) {
                 $post = new Post();
                 $post->setUser($userAdmin)
-                    ->setTitle("post " . $p)
-                    ->setBody("du contenu");
+                    ->setTitle($faker->words(rand(3, 10), true))
+                    ->setBody($faker->paragraphs(rand(2, 5), true))
+                    ->setAuthor($faker->name())
+                    ->setImg("https://placeimg.com/300/300/any");
 
                 $manager->persist($post);
 
@@ -44,7 +49,7 @@ class AppFixtures extends Fixture
                     $comment = new Comment();
                     $comment->setUser($user)
                         ->setPost($post)
-                        ->setBody("du contenu");
+                        ->setBody($faker->words(rand(10, 30), true));
 
                     $manager->persist($comment);
                 }

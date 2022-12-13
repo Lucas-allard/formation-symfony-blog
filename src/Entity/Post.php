@@ -39,6 +39,12 @@ class Post
     #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'posts')]
     private Collection $categories;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $img = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $author = null;
+
     public function __construct()
     {
         $this->createdAt = new DateTime();
@@ -166,6 +172,30 @@ class Post
         if ($this->categories->removeElement($category)) {
             $category->removePost($this);
         }
+
+        return $this;
+    }
+
+    public function getImg(): ?string
+    {
+        return $this->img;
+    }
+
+    public function setImg(?string $img): self
+    {
+        $this->img = $img;
+
+        return $this;
+    }
+
+    public function getAuthor(): ?string
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(string $author): self
+    {
+        $this->author = $author;
 
         return $this;
     }
