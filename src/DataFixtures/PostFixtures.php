@@ -4,10 +4,11 @@ namespace App\DataFixtures;
 
 use App\Entity\Post;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker;
 
-class PostFixtures extends Fixture
+class PostFixtures extends Fixture implements DependentFixtureInterface
 {
 
     public function load(ObjectManager $manager): void
@@ -22,7 +23,8 @@ class PostFixtures extends Fixture
                 ->setImg($faker->imageUrl(640, 480, 'animals', true));
 
             for ($i = 0; $i < rand(1, 3); $i++) {
-                $post->addCategory($this->getReference("category" . rand(0, 4)));
+                $post->addCategory($this->getReference("category" . rand(0, 4)))
+                ->setUser($this->getReference("user_admin" . rand(0,4)));
             }
 
             $manager->persist($post);
@@ -32,5 +34,13 @@ class PostFixtures extends Fixture
 
         $manager->flush();
 
+    }
+    public function getDependencies()
+    {
+        return [
+            UserAdminFixtures::class,
+            UserFixtures::class,
+            CategoryFixtures::class,
+        ];
     }
 }
