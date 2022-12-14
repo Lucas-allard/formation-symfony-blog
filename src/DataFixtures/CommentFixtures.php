@@ -4,10 +4,11 @@ namespace App\DataFixtures;
 
 use App\Entity\Comment;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker;
 
-class CommentFixtures extends Fixture
+class CommentFixtures extends Fixture implements DependentFixtureInterface
 {
 
     public function load(ObjectManager $manager): void
@@ -28,5 +29,15 @@ class CommentFixtures extends Fixture
         $manager->flush();
 
 
+    }
+
+    public function getDependencies()
+    {
+        return [
+            UserAdminFixtures::class,
+            UserFixtures::class,
+            CategoryFixtures::class,
+            PostFixtures::class,
+        ];
     }
 }
