@@ -21,9 +21,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $email = null;
 
     #[ORM\Column]
-    private array $roles = [
-        'ROLE_USER'
-    ];
+    private array $roles = [];
 
     /**
      * @var string The hashed password
@@ -116,9 +114,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, Post>
      */
-    public function getPost(): Collection
+    public function getPosts(): Collection
     {
-        return $this->post;
+        return $this->posts;
     }
 
     public function addPost(Post $post): self
