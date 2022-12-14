@@ -13,10 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class PostController extends AbstractController
 {
-    /**
-     * @param CategoryRepository $categoryRepository
-     * @param PostRepository $postRepository
-     */
+
     public function __construct(private readonly CategoryRepository $categoryRepository, private readonly PostRepository $postRepository)
     {
     }
@@ -54,15 +51,16 @@ class PostController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    #[Route('/post/search/', name: 'index_by_search', methods: ['POST'])]
-    public function showSearchResult(Request $request): Response
-    {
-        $searchValue = $request->request->get("search");
-        $posts = $this->postRepository->findBySearch($searchValue);
 
-        return $this->render('post/showBySearch.html.twig', [
+    #[Route('/post/search', name: 'index_by_search')]
+    public function showBySearch( Request $request): Response
+    {
+
+        $searchValue = $request->request->get('search');
+
+        return $this->render('post/showByCategory.html.twig', [
             'categories' => $this->categoryRepository->findAll(),
-            'post' => $posts
+            'posts' => $this->postRepository->findBySearch($searchValue),
         ]);
     }
 
