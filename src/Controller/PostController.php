@@ -96,14 +96,12 @@ class PostController extends AbstractController
                 $entityManager->persist($comment);
                 $entityManager->flush();
             }
-        } else {
-            $commentForm = null;
         }
 
 
         return $this->render('post/show.html.twig', [
             'post' => $post,
-            'commentForm' => $commentForm
+            'commentForm' => $commentForm ?? null
         ]);
     }
 }
