@@ -48,8 +48,12 @@ class AdminController extends AbstractController
     public function postDelete(Post $post): Response
     {
 
-        $this->postRepository->remove($post, true);
+        if ($this->postRepository->remove($post, true)) {
+            $this->addFlash('success', 'Article supprimé avec succès');
+        } else {
+            $this->addFlash('danger', 'Erreur lors de la suppression');
 
+        }
 
         return $this->redirectToRoute("admin_post_show");
     }

@@ -27,9 +27,16 @@
 
 {% include('shared/_navbar.html.twig') %}
 
+{% for type, message in app.flashes %}
+    <div class="alert alert-{{ type }}">
+        {{ message.0 }}
+    </div>
+{% endfor %}
+
 {% block body %}
 
 {% endblock %}
+
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
         integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
         crossorigin="anonymous"></script>
