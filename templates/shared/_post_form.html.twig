@@ -1,0 +1,8 @@
+{{ form_start(updatePostForm) }}
+{#  {{ form_row(updatePostForm.category) }}#}
+  {{ form_row(updatePostForm.title) }}
+  {{ form_row(updatePostForm.body) }}
+  {{ form_row(updatePostForm.img) }}
+  {{ form_row(updatePostForm.author) }}
+  {{ form_row(updatePostForm.send) }}
+{{ form_end(updatePostForm, {render_rest: false}) }}

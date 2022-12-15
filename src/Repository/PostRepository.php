@@ -21,13 +21,15 @@ class PostRepository extends ServiceEntityRepository
         parent::__construct($registry, Post::class);
     }
 
-    public function save(Post $entity, bool $flush = false): void
+    public function save(Post $entity, bool $flush = false): bool
     {
         $this->getEntityManager()->persist($entity);
 
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+
+        return $flush;
     }
 
     public function remove(Post $entity, bool $flush = false): bool

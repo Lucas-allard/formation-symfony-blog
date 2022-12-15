@@ -31,8 +31,11 @@
                            class="btn btn-round btn-info">Lire plus
                         </a>
                         {% if is_granted("ROLE_ADMIN") %}
-                            <a href="{{ path("admin_post_delete", { post: post.id}) }}" title="read more"
+                            <a href="{{ path("admin_post_delete", { id: post.id}) }}" title="read more"
                                class="btn btn-round btn-danger">Supprimer
+                            </a>
+                            <a href="{{ path("admin_post_update", { id: post.id}) }}" title="read more"
+                               class="btn btn-round btn-primary">Editer
                             </a>
                         {% endif %}
                     </div>
