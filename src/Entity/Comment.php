@@ -27,11 +27,16 @@ class Comment
     private ?Post $post = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-    public function __construct()
+    #[ORM\Column]
+    private ?bool $isValid = null;
+
+    public function __construct(User $user)
     {
-        $this->createdAt = new DateTime();
+        $this->setUser($user);
+        $this->isValid = true;
     }
 
     public function getId(): ?int
@@ -83,6 +88,18 @@ class Comment
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function isIsValid(): ?bool
+    {
+        return $this->isValid;
+    }
+
+    public function setIsValid(bool $isValid): self
+    {
+        $this->isValid = $isValid;
 
         return $this;
     }

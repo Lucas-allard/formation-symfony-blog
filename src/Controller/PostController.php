@@ -3,10 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\Category;
+use App\Entity\Comment;
 use App\Entity\Post;
+use App\Entity\User;
+use App\Form\CommentFormType;
 use App\Repository\CategoryRepository;
 use App\Repository\PostRepository;
+use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -53,7 +60,7 @@ class PostController extends AbstractController
      */
 
     #[Route('/post/search', name: 'index_by_search')]
-    public function showBySearch( Request $request): Response
+    public function showBySearch(Request $request): Response
     {
 
         $searchValue = $request->request->get('search');
@@ -66,14 +73,39 @@ class PostController extends AbstractController
 
     /**
      * @param Post $post
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
      * @return Response
      */
     #[Route('/post/{id<[0-9]+>}', name: 'post')]
-    public function show(Post $post): Response
+    public function show(Post $post, Request $request, EntityManagerInterface $entityManager): Response
     {
+
+
+        if ($this->getUser()) {
+            /** @var User $user */
+            $user = $this->getUser();
+
+            $comment = new Comment($user);
+
+            $commentForm = $this->createForm(CommentFormType::class, $comment);
+            $commentForm->handleRequest($request);
+
+            if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+                $comment->setCreatedAt(new DateTime())
+                    ->setPost($post);
+
+                $entityManager->persist($comment);
+                $entityManager->flush();
+
+                return $this->redirectToRoute("post", ["id" => $post->getId()]);
+            }
+        }
+
 
         return $this->render('post/show.html.twig', [
             'post' => $post,
+            'commentForm' => $commentForm ?? null
         ]);
     }
 }
