@@ -79,6 +79,7 @@ class PostController extends AbstractController
     {
 
         $comment = new Comment();
+
         $commentForm = $this->createForm(CommentFormType::class, $comment);
 
         $commentForm->handleRequest($request);
