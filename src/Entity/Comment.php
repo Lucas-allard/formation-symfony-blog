@@ -35,8 +35,7 @@ class Comment
 
     public function __construct(User $user)
     {
-        $this->user = $user;
-        $this->createdAt = new DateTime();
+        $this->setUser($user);
         $this->isValid = true;
     }
 
