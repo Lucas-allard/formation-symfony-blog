@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Category;
 use App\Entity\Comment;
 use App\Entity\Post;
+use App\Entity\User;
 use App\Form\CommentFormType;
 use App\Repository\CategoryRepository;
 use App\Repository\PostRepository;
@@ -80,23 +81,31 @@ class PostController extends AbstractController
     public function show(Post $post, Request $request, EntityManagerInterface $entityManager): Response
     {
 
-        $comment = new Comment($this->getUser());
 
-        $commentForm = $this->createForm(CommentFormType::class, $comment);
+        if ($this->getUser()) {
+            /** @var User $user */
+            $user = $this->getUser();
 
-        $commentForm->handleRequest($request);
+            $comment = new Comment($user);
+
+            $commentForm = $this->createForm(CommentFormType::class, $comment);
+
+            $commentForm->handleRequest($request);
 
 
-        if ($commentForm->isSubmitted() && $commentForm->isValid()) {
-            $comment->setPost($post);
+            if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+                $comment->setPost($post);
 
-            $entityManager->persist($comment);
-            $entityManager->flush();
+                $entityManager->persist($comment);
+                $entityManager->flush();
+            }
+        } else {
+            $commentForm = null;
         }
+
 
         return $this->render('post/show.html.twig', [
             'post' => $post,
-            'comments' => $post->getComments(),
             'commentForm' => $commentForm
         ]);
     }

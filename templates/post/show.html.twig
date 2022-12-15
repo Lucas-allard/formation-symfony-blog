@@ -47,18 +47,7 @@
                         </div>
                         {% include("shared/_comment.html.twig") %}
                         <hr class="mb40">
-                        {% if app.user %}
-                            <h4 class="mb40 text-uppercase font500">Ajouter un commentaire</h4>
-
-                            {{ form_start(commentForm) }}
-                            {{ form_row(commentForm.body, {
-                                label: "Commentaire"
-                            }) }}
-                            {{ form_row(commentForm.send, {
-                                label: "Envoyé"
-                            }) }}
-                            {{ form_end(commentForm) }}
-                        {% endif %}
+                        {% include("shared/_commentForm.html.twig") %}
                     </div>
                 </article>
             </div>

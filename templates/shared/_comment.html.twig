@@ -1,7 +1,7 @@
 <hr class="mb40">
 <h4 class="mb40 text-uppercase font500">Commentaires</h4>
 <div class="media mb40 d-flex flex-column">
-    {% for comment in comments %}
+    {% for comment in post.comments|sort((a,b) => b.createdAt <=> a.createdAt) %}
         <div class="mb-4">
             <div class="d-flex align-items-center">
                 <i class="d-flex mr-3 fa fa-user-circle-o fa-3x"></i>
