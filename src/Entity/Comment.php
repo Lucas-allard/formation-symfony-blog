@@ -35,6 +35,7 @@ class Comment
     public function __construct()
     {
         $this->createdAt = new DateTime();
+        $this->isValid = true;
     }
 
     public function getId(): ?int

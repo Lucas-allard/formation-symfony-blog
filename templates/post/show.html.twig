@@ -38,7 +38,7 @@
                             </li>
                         </ul>
                         <hr class="mb40">
-                        <h4 class="mb40 text-uppercase font500">About Author</h4>
+                        <h4 class="mb40 text-uppercase font500">A propos de l'auteur</h4>
                         <div class="media mb40">
                             <i class="d-flex mr-3 fa fa-user-circle fa-5x text-primary"></i>
                             <div class="media-body">
@@ -46,7 +46,7 @@
                             </div>
                         </div>
                         <hr class="mb40">
-                        <h4 class="mb40 text-uppercase font500">Comments</h4>
+                        <h4 class="mb40 text-uppercase font500">Commentaires</h4>
                         <div class="media mb40 d-flex flex-column">
                             {% for comment in comments %}
                                 <div class="mb-4">
@@ -64,19 +64,20 @@
                             {% endfor %}
                         </div>
                         <hr class="mb40">
-                        <h4 class="mb40 text-uppercase font500">Post a comment</h4>
-                        <form role="form">
-                            <div class="form-group">
-                                <label>Comment</label>
-                                <textarea class="form-control" rows="5" placeholder="Comment"></textarea>
-                            </div>
-                            <div class="clearfix float-right">
-                                <button type="button" class="btn btn-primary btn-lg">Submit</button>
-                            </div>
-                        </form>
+                        {% if app.user %}
+                            <h4 class="mb40 text-uppercase font500">Ajouter un commentaire</h4>
+
+                            {{ form_start(commentForm) }}
+                            {{ form_row(commentForm.body, {
+                                label: "Commentaire"
+                            }) }}
+                            {{ form_row(commentForm.send, {
+                                label: "Envoyé"
+                            }) }}
+                            {{ form_end(commentForm) }}
+                        {% endif %}
                     </div>
                 </article>
-                <!-- post article-->
             </div>
             <div class="col-md-3 mb40">
                 <div class="mb40">

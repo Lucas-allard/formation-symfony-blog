@@ -5,8 +5,11 @@ namespace App\Controller;
 use App\Entity\Category;
 use App\Entity\Comment;
 use App\Entity\Post;
+use App\Form\CommentFormType;
 use App\Repository\CategoryRepository;
 use App\Repository\PostRepository;
+use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -72,18 +75,29 @@ class PostController extends AbstractController
      * @return Response
      */
     #[Route('/post/{id<[0-9]+>}', name: 'post')]
-    public function show(Post $post): Response
+    public function show(Post $post, Request $request, EntityManagerInterface $entityManager): Response
     {
 
         $comment = new Comment();
-        $form = $this->createFormBuilder($comment)
-            ->add('body', TextType::class)
-            ->add('send', SubmitType::class, ['label' => 'Create Task'])
-            ->getForm();
+        $commentForm = $this->createForm(CommentFormType::class, $comment);
+
+        $commentForm->handleRequest($request);
+
+
+        if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+            // encode the plain password
+            $comment->setPost($post)
+                ->setUser($this->getUser());
+
+            $entityManager->persist($comment);
+            $entityManager->flush();
+        }
 
         return $this->render('post/show.html.twig', [
             'post' => $post,
-            'comments' => $post->getComments()
+            'comments' => $post->getComments(),
+            'commentForm' => $commentForm
+
         ]);
     }
 }
