@@ -10,12 +10,17 @@ use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use function Symfony\Component\Translation\t;
 
 // #[isGranted('ROLE_ADMIN')]
 class AdminController extends AbstractController
 {
+    public function __construct(private PostRepository $postRepository)
+    {
+    }
+
     #[Route('/admin', name: 'admin')]
-    #[IsGranted('ROLE_ADMIN', statusCode: 403, message: 'Accès refuser aux nom-admins')]
+    #[IsGranted('ROLE_ADMIN', message: 'Accès refuser aux nom-admins', statusCode: 403)]
     public function index(): Response
     {
 
@@ -29,12 +34,23 @@ class AdminController extends AbstractController
     }
 
     #[Route('/admin/post/show', name: 'admin_post_show')]
-    #[IsGranted('ROLE_ADMIN', statusCode: 403, message: 'Accès refuser aux nom-admins')]
-    public function postShow(PostRepository $postRepository): Response
+    #[IsGranted('ROLE_ADMIN', message: 'Accès refuser aux nom-admins', statusCode: 403)]
+    public function postShow(): Response
     {
 
         return $this->render('admin/post_show.html.twig', [
-            'posts' => $postRepository->findAll()
+            'posts' => $this->postRepository->findAll()
         ]);
+    }
+
+    #[Route('/admin/post/delete/{post}', name: 'admin_post_delete')]
+    #[IsGranted('ROLE_ADMIN', message: 'Accès refuser aux nom-admins', statusCode: 403)]
+    public function postDelete(Post $post): Response
+    {
+
+        $this->postRepository->remove($post, true);
+
+
+        return $this->redirectToRoute("admin_post_show");
     }
 }
