@@ -14,22 +14,15 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class AdminController extends AbstractController
 {
     #[Route('/admin', name: 'admin')]
-    // #[IsGranted('ROLE_ADMIN', statusCode: 403, message: 'Accès refuser aux nom-admins')]
+    #[IsGranted('ROLE_ADMIN', statusCode: 403, message: 'Accès refuser aux nom-admins')]
     public function index(): Response
     {
-//        $this->denyAccessUnlessGranted('ROLE_ADMIN', null, "accès refusé");
 
-         if(!$this->getUser()) {
-             $this->addFlash('danger', 'Vous devez être connecté pour accéder à cette page');
-
-             return $this->redirectToRoute('home');
-         }
-
-         if(!$this->isGranted('ROLE_ADMIN')) {
-             $this->addFlash('danger', 'Vous devez être admin pour accéder à cette page');
-
-             return $this->redirectToRoute('home');
-         }
+//         if(!$this->isGranted('ROLE_ADMIN')) {
+//             $this->addFlash('danger', 'Vous devez être admin pour accéder à cette page');
+//
+//             return $this->redirectToRoute('home');
+//         }
 
         return $this->render('admin/index.html.twig', );
     }
