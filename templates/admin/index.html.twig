@@ -5,5 +5,18 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Espace administrateur</h1>
+    <div class="wrapper w-100">
+        {% include("shared/_sidebar.html.twig") %}
+
+        <div class="container">
+            <h1 class="text-dark text-center p-5">Espace administrateur</h1>
+
+            {% if posts %}
+                <div>
+                    {% include("shared/_post.html.twig") %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
 {% endblock %}
