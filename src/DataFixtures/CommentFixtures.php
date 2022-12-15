@@ -20,11 +20,24 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
             $comment = new Comment();
             $comment->setUser($this->getReference('user' . rand(0, 3)))
                 ->setPost($this->getReference('post' . rand(0, 9)))
-                ->setBody($faker->words(3, true));
+                ->setBody($faker->words(3, true))
+                ->setIsValid(true);
 
             $manager->persist($comment);
 
         }
+
+        for ($c = 0; $c < 5; $c++) {
+            $comment = new Comment();
+            $comment->setUser($this->getReference('user' . rand(0, 3)))
+                ->setPost($this->getReference('post' . rand(0, 9)))
+                ->setBody($faker->words(3, true))
+                ->setIsValid(false);
+
+            $manager->persist($comment);
+
+        }
+
         $manager->flush();
     }
 
