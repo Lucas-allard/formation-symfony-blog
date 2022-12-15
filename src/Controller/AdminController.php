@@ -3,12 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Post;
-use App\Form\PostUpdateFormType;
+use App\Form\PostFormType;
 use App\Repository\PostRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -61,12 +62,13 @@ class AdminController extends AbstractController
 
     #[Route('/admin/post/update/{id}', name: 'admin_post_update')]
     #[IsGranted('ROLE_ADMIN', message: 'Accès refuser aux nom-admins', statusCode: 403)]
-    public function postUpdate(Post $post, EntityManagerInterface $entityManager): Response
+    public function postUpdate(Post $post, Request $request): Response
     {
-        $updatePostForm = $this->createForm(PostUpdateFormType::class, $post);
-        dump($updatePostForm);
+        $updatePostForm = $this->createForm(PostFormType::class, $post);
+        $updatePostForm->handleRequest($request);
+
+
         if ($updatePostForm->isSubmitted()) {
-            dd(($this->postRepository->save($post, true)));
             if ($this->postRepository->save($post, true)) {
                 $this->addFlash('success', 'Article édité avec succès');
             } else {
