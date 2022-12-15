@@ -29,6 +29,9 @@ class Comment
     #[ORM\ManyToOne(inversedBy: 'comments')]
     private ?User $user = null;
 
+    #[ORM\Column]
+    private ?bool $isValid = null;
+
     public function __construct()
     {
         $this->createdAt = new DateTime();
@@ -83,6 +86,18 @@ class Comment
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function isIsValid(): ?bool
+    {
+        return $this->isValid;
+    }
+
+    public function setIsValid(bool $isValid): self
+    {
+        $this->isValid = $isValid;
 
         return $this;
     }
