@@ -33,7 +33,7 @@ class AdminController extends AbstractController
     public function postShow(PostRepository $postRepository): Response
     {
 
-        return $this->render('admin/index.html.twig', [
+        return $this->render('admin/post_show.html.twig', [
             'posts' => $postRepository->findAll()
         ]);
     }

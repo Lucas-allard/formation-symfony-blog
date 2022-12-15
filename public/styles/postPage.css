@@ -164,7 +164,7 @@
 }
 
 .card {
-    background: #fff;
+    background: lightslategray;
     margin-bottom: 30px;
     transition: .5s;
     border: 0;
