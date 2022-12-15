@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Post;
+use App\Repository\PostRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
@@ -24,6 +25,16 @@ class AdminController extends AbstractController
 //             return $this->redirectToRoute('home');
 //         }
 
-        return $this->render('admin/index.html.twig', );
+        return $this->render('admin/index.html.twig',);
+    }
+
+    #[Route('/admin/post/show', name: 'admin_post_show')]
+    #[IsGranted('ROLE_ADMIN', statusCode: 403, message: 'Accès refuser aux nom-admins')]
+    public function postShow(PostRepository $postRepository): Response
+    {
+
+        return $this->render('admin/index.html.twig', [
+            'posts' => $postRepository->findAll()
+        ]);
     }
 }
