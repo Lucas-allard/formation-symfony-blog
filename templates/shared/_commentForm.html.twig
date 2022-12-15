@@ -2,11 +2,7 @@
     <h4 class="mb40 text-uppercase font500">Ajouter un commentaire</h4>
 
     {{ form_start(commentForm) }}
-    {{ form_row(commentForm.body, {
-        label: "Commentaire"
-    }) }}
-    {{ form_row(commentForm.send, {
-        label: "Envoyé"
-    }) }}
+    {{ form_row(commentForm.body) }}
+    {{ form_row(commentForm.send) }}
     {{ form_end(commentForm) }}
 {% endif %}
