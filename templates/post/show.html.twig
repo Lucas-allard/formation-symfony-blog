@@ -45,24 +45,7 @@
                                 <h5 class="mt-0 font700">{{ post.author }}</h5>
                             </div>
                         </div>
-                        <hr class="mb40">
-                        <h4 class="mb40 text-uppercase font500">Commentaires</h4>
-                        <div class="media mb40 d-flex flex-column">
-                            {% for comment in comments %}
-                                <div class="mb-4">
-                                    <div class="d-flex align-items-center">
-                                        <i class="d-flex mr-3 fa fa-user-circle-o fa-3x"></i>
-                                        <p class="mt-0 font400 clearfix">{{ comment.user.email }}</p>
-                                    </div>
-                                    <div class="media-body pt-2">
-                                        <div>
-                                            <p>{{ comment.body }}</p>
-                                            <p><em>{{ comment.createdAt | date("d-m-Y") }}</em></p>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
+                        {% include("shared/_comment.html.twig") %}
                         <hr class="mb40">
                         {% if app.user %}
                             <h4 class="mb40 text-uppercase font500">Ajouter un commentaire</h4>
