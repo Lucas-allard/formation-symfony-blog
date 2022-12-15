@@ -33,8 +33,9 @@ class Comment
     #[ORM\Column]
     private ?bool $isValid = null;
 
-    public function __construct()
+    public function __construct(User $user)
     {
+        $this->user = $user;
         $this->createdAt = new DateTime();
         $this->isValid = true;
     }

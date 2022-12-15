@@ -72,13 +72,15 @@ class PostController extends AbstractController
 
     /**
      * @param Post $post
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
      * @return Response
      */
     #[Route('/post/{id<[0-9]+>}', name: 'post')]
     public function show(Post $post, Request $request, EntityManagerInterface $entityManager): Response
     {
 
-        $comment = new Comment();
+        $comment = new Comment($this->getUser());
 
         $commentForm = $this->createForm(CommentFormType::class, $comment);
 
@@ -86,9 +88,7 @@ class PostController extends AbstractController
 
 
         if ($commentForm->isSubmitted() && $commentForm->isValid()) {
-            // encode the plain password
-            $comment->setPost($post)
-                ->setUser($this->getUser());
+            $comment->setPost($post);
 
             $entityManager->persist($comment);
             $entityManager->flush();
@@ -98,7 +98,6 @@ class PostController extends AbstractController
             'post' => $post,
             'comments' => $post->getComments(),
             'commentForm' => $commentForm
-
         ]);
     }
 }
