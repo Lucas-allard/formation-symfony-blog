@@ -18,8 +18,8 @@ class AdminController extends AbstractController
 {
 
     public function __construct(
-        private PostRepository    $postRepository,
-        private CommentRepository $commentRepository
+        private readonly PostRepository $postRepository,
+        private readonly CommentRepository $commentRepository
     )
     {
     }
