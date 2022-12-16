@@ -97,24 +97,6 @@ class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/post/delete/{id<[0-9]+>}', name: 'admin_post_delete')]
-    #[IsGranted('ROLE_ADMIN', message: 'Accès refuser aux nom-admins', statusCode: 403)]
-    public function postDelete(Request $request, Post $post): Response
-    {
-
-        $token = $request->query->get("token");
-
-        if ($this->isCsrfTokenValid('post' . $post->getId(), $token)) {
-            $this->postRepository->remove($post, true);
-
-            $this->addFlash('success', 'Article supprimé avec succès');
-
-        }
-
-
-        return $this->redirectToRoute("admin_post_show");
-    }
-
     #[Route('/admin/post/update/{id<[0-9]+>}', name: 'admin_post_update')]
     #[IsGranted('ROLE_ADMIN', message: 'Accès refuser aux nom-admins', statusCode: 403)]
     public function postUpdate(Request $request, Post $post, EntityManagerInterface $entityManager): Response
@@ -139,6 +121,21 @@ class AdminController extends AbstractController
         return $this->render('admin/post_update.html.twig', [
             'postForm' => $postForm ?? null
         ]);
+    }
+
+    #[Route('/admin/post/delete/{id<[0-9]+>}', name: 'admin_post_delete')]
+    #[IsGranted('ROLE_ADMIN', message: 'Accès refuser aux nom-admins', statusCode: 403)]
+    public function postDelete(Request $request, Post $post): Response
+    {
+        $token = $request->query->get("token");
+
+        if ($this->isCsrfTokenValid('post' . $post->getId(), $token)) {
+            $this->postRepository->remove($post, true);
+
+            $this->addFlash('success', 'Article supprimé avec succès');
+        }
+
+        return $this->redirectToRoute("admin_post_show");
     }
 
     #[Route('/admin/comment/show/unvalid', name: 'admin_comment_unvalid')]

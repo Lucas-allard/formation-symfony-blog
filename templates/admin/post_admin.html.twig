@@ -34,7 +34,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for post in posts %}
+                {% for post in posts|sort((a,b) => b.createdAt <=> a.createdAt) %}
                     <tr class="table-active">
                         <th scope="row">{{ post.user.name }}</th>
                         <td>{{ post.createdAt|date('d-m-Y') }}</td>

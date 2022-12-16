@@ -24,6 +24,7 @@ class PostFormType extends AbstractType
                 'class' => Category::class,
                 'choice_label' => 'name',
                 'multiple' => true,
+                'by_reference' => false,
             ])
             ->add("send", SubmitType::class, ['label' => "Soumettre"]);
     }
