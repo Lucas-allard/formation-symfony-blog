@@ -13,15 +13,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use function Symfony\Component\Translation\t;
 
 class AdminController extends AbstractController
 {
-    private Request $request;
 
-    public function __construct(private PostRepository $postRepository, private CommentRepository $commentRepository)
+    public function __construct(
+        private PostRepository    $postRepository,
+        private CommentRepository $commentRepository
+    )
     {
-        $this->request = new Request();
     }
 
     #[Route('/admin', name: 'admin')]
@@ -48,17 +48,20 @@ class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/post/validate', name: 'admin_post_validate')]
+    #[Route('/admin/post/validate/{id<[0-9]+>}', name: 'admin_post_validate')]
     #[IsGranted('ROLE_ADMIN', message: 'Accès refuser aux nom-admins', statusCode: 403)]
-    public function postValidate(Post $post): Response
+    public function postValidate(Request $request, Post $post): Response
     {
-        $token = $this->request->query->get("token");
+        $token = $request->query->get("token");
 
         if ($this->isCsrfTokenValid('post' . $post->getId(), $token)) {
 
-            $post->setIsPublished(true);
+            $post->setIsPublished(!$post->isIsPublished());
 
-            $this->commentRepository->save($post, true);
+            $this->postRepository->save($post, true);
+
+            $this->addFlash('success', 'Publication de l\'article edité avec succès');
+
         }
 
         return $this->render('admin/post_admin.html.twig', [
@@ -66,40 +69,75 @@ class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/post/delete/{id}', name: 'admin_post_delete')]
+    #[Route('/admin/post/add/', name: 'admin_post_add')]
     #[IsGranted('ROLE_ADMIN', message: 'Accès refuser aux nom-admins', statusCode: 403)]
-    public function postDelete(Post $post): Response
+    public function postAdd(Request $request): Response
+    {
+        $token = $request->query->get('token');
+
+        if ($this->isCsrfTokenValid('post', $token)) {
+            $post = new Post();
+
+            $postForm = $this->createForm(PostFormType::class, $post);
+            $postForm->handleRequest($request);
+
+            if ($postForm->isSubmitted() && $postForm->isValid()) {
+                $post->setUser($this->getUser());
+
+                $this->postRepository->save($post, true);
+
+                $this->addFlash('success', 'Article ajouté avec succès');
+
+                return $this->redirectToRoute("admin_post_show");
+            }
+        }
+
+        return $this->render('admin/post_update.html.twig', [
+            'postForm' => $postForm ?? null
+        ]);
+    }
+
+    #[Route('/admin/post/delete/{id<[0-9]+>}', name: 'admin_post_delete')]
+    #[IsGranted('ROLE_ADMIN', message: 'Accès refuser aux nom-admins', statusCode: 403)]
+    public function postDelete(Request $request, Post $post): Response
     {
 
-        $token = $this->request->query->get("token");
+        $token = $request->query->get("token");
 
         if ($this->isCsrfTokenValid('post' . $post->getId(), $token)) {
             $this->postRepository->remove($post, true);
+
+            $this->addFlash('success', 'Article supprimé avec succès');
+
         }
 
 
         return $this->redirectToRoute("admin_post_show");
     }
 
-    #[Route('/admin/post/update/{id}', name: 'admin_post_update')]
+    #[Route('/admin/post/update/{id<[0-9]+>}', name: 'admin_post_update')]
     #[IsGranted('ROLE_ADMIN', message: 'Accès refuser aux nom-admins', statusCode: 403)]
-    public function postUpdate(Post $post, EntityManagerInterface $entityManager): Response
+    public function postUpdate(Request $request, Post $post, EntityManagerInterface $entityManager): Response
     {
-        $updatePostForm = $this->createForm(PostFormType::class, $post);
-        $updatePostForm->handleRequest($this->request);
+        $token = $request->query->get('token');
+
+        if ($this->isCsrfTokenValid('post' . $post->getId(), $token)) {
+            $postForm = $this->createForm(PostFormType::class, $post);
+            $postForm->handleRequest($request);
 
 
-        if ($updatePostForm->isSubmitted() && $updatePostForm->isValid()) {
-            $entityManager->persist($post);
-            $entityManager->flush();
+            if ($postForm->isSubmitted() && $postForm->isValid()) {
+                $entityManager->persist($post);
+                $entityManager->flush();
 
-            $this->addFlash('success', 'Article édité avec succès');
+                $this->addFlash('success', 'Article édité avec succès');
 
-            return $this->redirectToRoute("admin_post_show");
+                return $this->redirectToRoute("admin_post_show");
+            }
         }
 
         return $this->render('admin/post_update.html.twig', [
-            'updatePostForm' => $updatePostForm
+            'postForm' => $postForm ?? null
         ]);
     }
 
@@ -125,30 +163,35 @@ class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/comment/delete/{id}', name: 'admin_comment_delete')]
+    #[Route('/admin/comment/delete/{id<[0-9]+>}', name: 'admin_comment_delete')]
     #[IsGranted('ROLE_ADMIN', message: 'Accès refuser aux nom-admins', statusCode: 403)]
-    public function commentDelete(Comment $comment): Response
+    public function commentDelete(Request $request, Comment $comment): Response
     {
-        $token = $this->request->query->get("token");
+        $token = $request->query->get("token");
 
         if ($this->isCsrfTokenValid('comment' . $comment->getId(), $token)) {
             $this->commentRepository->remove($comment, true);
+
+            $this->addFlash('success', 'Commentaire supprimé avec succès');
 
         }
         return $this->redirectToRoute('admin');
     }
 
-    #[Route('/admin/comment/validate/{id}', name: 'admin_comment_validate')]
+    #[Route('/admin/comment/validate/{id<[0-9]+>}', name: 'admin_comment_validate')]
     #[IsGranted('ROLE_ADMIN', message: 'Accès refuser aux nom-admins', statusCode: 403)]
-    public function commentValidate(Comment $comment): Response
+    public function commentValidate(Request $request, Comment $comment): Response
     {
-        $token = $this->request->query->get("token");
+        $token = $request->query->get("token");
 
         if ($this->isCsrfTokenValid('comment' . $comment->getId(), $token)) {
 
             $comment->setIsValid(true);
 
             $this->commentRepository->save($comment, true);
+
+            $this->addFlash('success', 'Commentaire validé avec succès');
+
         }
 
         return $this->redirectToRoute('admin_comment_unvalid');

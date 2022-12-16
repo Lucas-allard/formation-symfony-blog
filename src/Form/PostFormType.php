@@ -20,7 +20,6 @@ class PostFormType extends AbstractType
             ->add('title', TextType::class, ['label' => "Titre"])
             ->add('body', TextareaType::class, ['label' => 'Contenu de l\'article'])
             ->add('img', TextType::class, ['label' => 'Image de l\'article'])
-            ->add('author', TextType::class, ['label' => 'Nom de l\'auteur'])
             ->add('categories', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => 'name',

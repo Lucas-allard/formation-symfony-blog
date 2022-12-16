@@ -36,7 +36,7 @@ class PostController extends AbstractController
 
         return $this->render('home/index.html.twig', [
             'categories' => $this->categoryRepository->findAll(),
-            'posts' => $this->postRepository->findAll(),
+            'posts' => $this->postRepository->findBy(['isPublished' => true])
         ]);
     }
 

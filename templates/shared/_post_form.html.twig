@@ -1,8 +1,8 @@
-{{ form_start(updatePostForm) }}
-  {{ form_row(updatePostForm.categories) }}
-  {{ form_row(updatePostForm.title) }}
-  {{ form_row(updatePostForm.body) }}
-  {{ form_row(updatePostForm.img) }}
-  {{ form_row(updatePostForm.author) }}
-  {{ form_row(updatePostForm.send) }}
-{{ form_end(updatePostForm, {render_rest: false}) }}
+{{ form_start(postForm) }}
+  {{ form_row(postForm.categories) }}
+  {{ form_row(postForm.title) }}
+  {{ form_row(postForm.body) }}
+  {{ form_row(postForm.img) }}
+  {{ form_row(postForm.send) }}
+  {{ form_row(postForm._token) }}
+{{ form_end(postForm, {render_rest: false}) }}
