@@ -49,8 +49,8 @@ class PostRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.title LIKE :val')
-            ->orWhere('p.author LIKE :val')
             ->orWhere('p.body LIKE :val')
+            ->andWhere('p.isPublished = true')
             ->setParameter('val', '%' . $search . '%')
             ->getQuery()
             ->getResult();

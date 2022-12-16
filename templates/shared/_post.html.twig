@@ -2,46 +2,48 @@
 <div class="container blog-page mt-5">
     <div class="row clearfix">
         {% for post in posts %}
-            <div class="col-lg-4 col-md-12 p-4">
-                <div class="card single_post p-4">
-                    <div class="header">
-                        <h2>{{ post.title }}</h2>
-                    </div>
-                    <div class="body">
-                        <ul class="meta">
-                            <li><a href="#"><i class="zmdi zmdi-account col-blue"></i>Posted By:
-                                    {{ post.user.name }}</a></li>
-                            <li>
-                                {#                                                                    <a href="#"><i class="zmdi zmdi-label col-amber"></i>{{ post.categories.name }}</a> #}
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <i class="zmdi zmdi-comment-text col-blue"></i>
-                                    Comments: {{ post.comments|length }}
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="body">
-                        <div class="img-post m-b-15">
-                            <img src='{{ post.img }}' alt="Awesome Image">
+            {% if post.isPublished %}
+                <div class="col-lg-4 col-md-12 p-4">
+                    <div class="card single_post p-4">
+                        <div class="header">
+                            <h2>{{ post.title }}</h2>
                         </div>
-                        <p>{{ post.body | slice(0, 100) }}...</p>
-                        <a href="{{ path("post", {id:post.id}) }}" title="read more"
-                           class="btn btn-round btn-info">Lire plus
-                        </a>
-                        {% if is_granted("ROLE_ADMIN") %}
-                            <a href="{{ path("admin_post_delete", { id: post.id}) }}?token={{ csrf_token('post' ~ post.id) }}"
-                               title="read more"
-                               class="btn btn-round btn-danger">Supprimer
+                        <div class="body">
+                            <ul class="meta">
+                                <li><a href="#"><i class="zmdi zmdi-account col-blue"></i>Posted By:
+                                        {{ post.user.name }}</a></li>
+                                <li>
+                                    {#                                                                    <a href="#"><i class="zmdi zmdi-label col-amber"></i>{{ post.categories.name }}</a> #}
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="zmdi zmdi-comment-text col-blue"></i>
+                                        Comments: {{ post.comments|length }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="body">
+                            <div class="img-post m-b-15">
+                                <img src='{{ post.img }}' alt="Awesome Image">
+                            </div>
+                            <p>{{ post.body | slice(0, 100) }}...</p>
+                            <a href="{{ path("post", {id:post.id}) }}" title="read more"
+                               class="btn btn-round btn-info">Lire plus
                             </a>
-                            <a href="{{ path("admin_post_update", { id: post.id}) }}" title="read more"
-                               class="btn btn-round btn-primary">Editer
-                            </a>
-                        {% endif %}
+                            {% if is_granted("ROLE_ADMIN") %}
+                                <a href="{{ path("admin_post_delete", { id: post.id}) }}?token={{ csrf_token('post' ~ post.id) }}"
+                                   title="read more"
+                                   class="btn btn-round btn-danger">Supprimer
+                                </a>
+                                <a href="{{ path("admin_post_update", { id: post.id}) }}" title="read more"
+                                   class="btn btn-round btn-primary">Editer
+                                </a>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
-            </div>
+            {% endif %}
         {% endfor %}
     </div>
 </div>
