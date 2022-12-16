@@ -47,7 +47,7 @@ class PostController extends AbstractController
     public function showByCategory(Category $category): Response
     {
 
-        return $this->render('home/index.html.twig.html.twig', [
+        return $this->render('home/index.html.twig', [
             'categories' => $this->categoryRepository->findAll(),
             'posts' => $category->getPosts(),
         ]);
@@ -64,7 +64,7 @@ class PostController extends AbstractController
 
         $searchValue = $request->request->get('search');
 
-        return $this->render('home/index.html.twig.html.twig', [
+        return $this->render('home/index.html.twig', [
             'categories' => $this->categoryRepository->findAll(),
             'posts' => $this->postRepository->findBySearch($searchValue),
         ]);

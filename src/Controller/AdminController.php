@@ -73,27 +73,23 @@ class AdminController extends AbstractController
     #[IsGranted('ROLE_ADMIN', message: 'Accès refuser aux nom-admins', statusCode: 403)]
     public function postAdd(Request $request): Response
     {
-        $token = $request->query->get('token');
+        $post = new Post();
 
-        if ($this->isCsrfTokenValid('post', $token)) {
-            $post = new Post();
+        $postForm = $this->createForm(PostFormType::class, $post);
+        $postForm->handleRequest($request);
 
-            $postForm = $this->createForm(PostFormType::class, $post);
-            $postForm->handleRequest($request);
+        if ($postForm->isSubmitted() && $postForm->isValid()) {
+            $post->setUser($this->getUser());
 
-            if ($postForm->isSubmitted() && $postForm->isValid()) {
-                $post->setUser($this->getUser());
+            $this->postRepository->save($post, true);
 
-                $this->postRepository->save($post, true);
+            $this->addFlash('success', 'Article ajouté avec succès');
 
-                $this->addFlash('success', 'Article ajouté avec succès');
-
-                return $this->redirectToRoute("admin_post_show");
-            }
+            return $this->redirectToRoute("admin_post_show");
         }
 
         return $this->render('admin/post_update.html.twig', [
-            'postForm' => $postForm ?? null
+            'postForm' => $postForm
         ]);
     }
 
@@ -101,12 +97,8 @@ class AdminController extends AbstractController
     #[IsGranted('ROLE_ADMIN', message: 'Accès refuser aux nom-admins', statusCode: 403)]
     public function postUpdate(Request $request, Post $post, EntityManagerInterface $entityManager): Response
     {
-        $token = $request->query->get('token');
-
-        if ($this->isCsrfTokenValid('post' . $post->getId(), $token)) {
             $postForm = $this->createForm(PostFormType::class, $post);
             $postForm->handleRequest($request);
-
 
             if ($postForm->isSubmitted() && $postForm->isValid()) {
                 $entityManager->persist($post);
@@ -116,10 +108,9 @@ class AdminController extends AbstractController
 
                 return $this->redirectToRoute("admin_post_show");
             }
-        }
 
         return $this->render('admin/post_update.html.twig', [
-            'postForm' => $postForm ?? null
+            'postForm' => $postForm
         ]);
     }
 
