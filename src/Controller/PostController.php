@@ -80,19 +80,18 @@ class PostController extends AbstractController
     #[Route('/post/{id<[0-9]+>}', name: 'post')]
     public function show(Post $post, Request $request, EntityManagerInterface $entityManager): Response
     {
-
-
         if ($this->getUser()) {
             /** @var User $user */
             $user = $this->getUser();
 
-            $comment = new Comment($user);
+            $comment = new Comment();
 
             $commentForm = $this->createForm(CommentFormType::class, $comment);
             $commentForm->handleRequest($request);
 
             if ($commentForm->isSubmitted() && $commentForm->isValid()) {
                 $comment->setCreatedAt(new DateTime())
+                    ->setUser($user)
                     ->setPost($post);
 
                 $entityManager->persist($comment);

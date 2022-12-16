@@ -19,7 +19,6 @@ class PostFixtures extends Fixture implements DependentFixtureInterface
             $post = new Post();
             $post->setTitle($faker->words(rand(3, 10), true))
                 ->setBody($faker->paragraphs(rand(2, 5), true))
-                ->setAuthor($faker->name())
                 ->setImg($faker->imageUrl(640, 480, 'animals', true));
 
             for ($i = 0; $i < rand(1, 3); $i++) {

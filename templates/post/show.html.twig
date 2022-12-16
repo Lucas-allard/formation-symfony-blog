@@ -12,7 +12,7 @@
                         <h3>{{ post.title }}</h3>
                         <ul class="post-meta list-inline">
                             <li class="list-inline-item">
-                                <i class="fa fa-user-circle-o"></i> <a href="#">{{ post.author }}</a>
+                                <i class="fa fa-user-circle-o"></i> <a href="#">{{ post.user.name }}</a>
                             </li>
                             <li class="list-inline-item">
                                 <i class="fa fa-calendar-o"></i> <a href="#">{{ post.createdAt| date("d-m-Y") }}</a>
@@ -42,7 +42,7 @@
                         <div class="media mb40">
                             <i class="d-flex mr-3 fa fa-user-circle fa-5x text-primary"></i>
                             <div class="media-body">
-                                <h5 class="mt-0 font700">{{ post.author }}</h5>
+                                <h5 class="mt-0 font700">{{ post.user.name }}</h5>
                             </div>
                         </div>
                         {% include("shared/_comment.html.twig") %}

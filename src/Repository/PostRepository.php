@@ -32,15 +32,13 @@ class PostRepository extends ServiceEntityRepository
         return $flush;
     }
 
-    public function remove(Post $entity, bool $flush = false): bool
+    public function remove(Post $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
         if ($flush) {
             $this->getEntityManager()->flush();
         }
-
-        return $flush;
     }
 
     /**
