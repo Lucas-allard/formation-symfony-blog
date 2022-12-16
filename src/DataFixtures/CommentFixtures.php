@@ -19,6 +19,7 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
         for ($u = 0; $u < 20; $u++) {
             $comment = new Comment();
             $comment->setUser($this->getReference('user' . rand(0, 3)))
+                ->setCreatedAt($faker->dateTimeBetween("-7 month"))
                 ->setPost($this->getReference('post' . rand(0, 9)))
                 ->setBody($faker->words(3, true))
                 ->setIsValid(true);
@@ -30,6 +31,7 @@ class CommentFixtures extends Fixture implements DependentFixtureInterface
         for ($c = 0; $c < 5; $c++) {
             $comment = new Comment();
             $comment->setUser($this->getReference('user' . rand(0, 3)))
+                ->setCreatedAt($faker->dateTimeBetween("-7 month"))
                 ->setPost($this->getReference('post' . rand(0, 9)))
                 ->setBody($faker->words(3, true))
                 ->setIsValid(false);

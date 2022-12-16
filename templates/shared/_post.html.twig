@@ -1,22 +1,8 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Hello HomeController!{% endblock %}
-
-{% block body %}
-
-    <h2>Liste des catégories</h2>
-    <div class="container text-center">
-        {% for category in categories %}
-            <a href={{ path('index_by_category', {id: category.id}) }}>
-                <span class="badge bg-dark ml-4 me-4">{{ category.name }}</span>
-            </a>
-        {% endfor %}
-    </div>
-
-    <h2 class="text-center mt-4">Liste des derniers articles</h2>
-    <div class="container blog-page mt-5">
-        <div class="row clearfix">
-            {% for post in posts %}
+<h2 class="text-center mt-4">Liste des derniers articles</h2>
+<div class="container blog-page mt-5">
+    <div class="row clearfix">
+        {% for post in posts %}
+            {% if post.isPublished %}
                 <div class="col-lg-4 col-md-12 p-4">
                     <div class="card single_post p-4">
                         <div class="header">
@@ -25,9 +11,9 @@
                         <div class="body">
                             <ul class="meta">
                                 <li><a href="#"><i class="zmdi zmdi-account col-blue"></i>Posted By:
-                                        {{ post.author }}</a></li>
+                                        {{ post.user.name }}</a></li>
                                 <li>
-                                    {#                                    <a href="#"><i class="zmdi zmdi-label col-amber"></i>{{ post.category.name }}</a> #}
+                                    {#                                                                    <a href="#"><i class="zmdi zmdi-label col-amber"></i>{{ post.categories.name }}</a> #}
                                 </li>
                                 <li>
                                     <a href="#">
@@ -43,14 +29,21 @@
                             </div>
                             <p>{{ post.body | slice(0, 100) }}...</p>
                             <a href="{{ path("post", {id:post.id}) }}" title="read more"
-                               class="btn btn-round btn-info">Read More</a>
+                               class="btn btn-round btn-info">Lire plus
+                            </a>
+                            {% if is_granted("ROLE_ADMIN") %}
+                                <a href="{{ path("admin_post_delete", { id: post.id}) }}?token={{ csrf_token('post' ~ post.id) }}"
+                                   title="read more"
+                                   class="btn btn-round btn-danger">Supprimer
+                                </a>
+                                <a href="{{ path("admin_post_update", { id: post.id}) }}" title="read more"
+                                   class="btn btn-round btn-primary">Editer
+                                </a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
-            {% endfor %}
-
-        </div>
+            {% endif %}
+        {% endfor %}
     </div>
-
-
-{% endblock %}
+</div>

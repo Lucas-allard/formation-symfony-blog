@@ -33,9 +33,8 @@ class Comment
     #[ORM\Column]
     private ?bool $isValid = null;
 
-    public function __construct(User $user)
+    public function __construct()
     {
-        $this->setUser($user);
         $this->isValid = true;
     }
 

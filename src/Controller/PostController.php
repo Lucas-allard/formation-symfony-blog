@@ -27,7 +27,6 @@ class PostController extends AbstractController
 
 
     /**
-     * @param PostRepository $postRepository
      * @return Response
      */
     #[Route('/', name: 'home')]
@@ -36,7 +35,7 @@ class PostController extends AbstractController
 
         return $this->render('home/index.html.twig', [
             'categories' => $this->categoryRepository->findAll(),
-            'posts' => $this->postRepository->findAll(),
+            'posts' => $this->postRepository->findBy(['isPublished' => true])
         ]);
     }
 
@@ -48,7 +47,7 @@ class PostController extends AbstractController
     public function showByCategory(Category $category): Response
     {
 
-        return $this->render('post/showByCategory.html.twig', [
+        return $this->render('home/index.html.twig', [
             'categories' => $this->categoryRepository->findAll(),
             'posts' => $category->getPosts(),
         ]);
@@ -65,7 +64,7 @@ class PostController extends AbstractController
 
         $searchValue = $request->request->get('search');
 
-        return $this->render('post/showByCategory.html.twig', [
+        return $this->render('home/index.html.twig', [
             'categories' => $this->categoryRepository->findAll(),
             'posts' => $this->postRepository->findBySearch($searchValue),
         ]);
@@ -80,19 +79,18 @@ class PostController extends AbstractController
     #[Route('/post/{id<[0-9]+>}', name: 'post')]
     public function show(Post $post, Request $request, EntityManagerInterface $entityManager): Response
     {
-
-
         if ($this->getUser()) {
             /** @var User $user */
             $user = $this->getUser();
 
-            $comment = new Comment($user);
+            $comment = new Comment();
 
             $commentForm = $this->createForm(CommentFormType::class, $comment);
             $commentForm->handleRequest($request);
 
             if ($commentForm->isSubmitted() && $commentForm->isValid()) {
                 $comment->setCreatedAt(new DateTime())
+                    ->setUser($user)
                     ->setPost($post);
 
                 $entityManager->persist($comment);

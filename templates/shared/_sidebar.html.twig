@@ -1,0 +1,28 @@
+<nav id="sidebar">
+    <ul class="list-unstyled components">
+        <p>Administration</p>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+               aria-expanded="false">Articles</a>
+            <div class="dropdown-menu bg-white ml-4" id="homeSubmenu">
+                <a class="dropdown-item" href="{{ path('admin_post_show') }}">Consulter</a>
+                <a class="dropdown-item" href="{{ path('admin_post_add') }}">Ajouter</a>
+            </div>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+               aria-expanded="false">Commentaires</a>
+            <div class="dropdown-menu bg-white ml-4" id="homeSubmenu">
+                <a class="dropdown-item" href="{{ path('admin_comment_unvalid') }}">Commentaires en attentes</a>
+                <a class="dropdown-item" href="{{ path('admin_comment_valid') }}">Commentaires validés</a>
+                <a class="dropdown-item" href="#">Editer/Supprimer un commentaire</a>
+            </div>
+        </li>
+    </ul>
+
+    <ul class="list-unstyled CTAs">
+        <li>
+            <a href="https://bootstrapious.com/p/bootstrap-sidebar" class="article">Back to article</a>
+        </li>
+    </ul>
+</nav>

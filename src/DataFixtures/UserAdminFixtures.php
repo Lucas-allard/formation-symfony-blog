@@ -23,6 +23,7 @@ class UserAdminFixtures extends Fixture
 
         $userAdmin = new User();
         $userAdmin->setEmail('admin@symblog.com')
+            ->setName("lucas")
             ->setPassword($this->hasher->hashPassword($userAdmin, "password"))
             ->setRoles(["ROLE_USER", "ROLE_ADMIN"]);
 
@@ -35,6 +36,7 @@ class UserAdminFixtures extends Fixture
         for ($u = 0; $u < 5; $u++) {
             $user = new User();
             $user->setEmail($faker->email())
+                ->setName($faker->firstName())
                 ->setPassword($this->hasher->hashPassword($user, "password"))
                 ->setRoles(["ROLE_USER", "ROLE_ADMIN"]);;
 
