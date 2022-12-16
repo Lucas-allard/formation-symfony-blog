@@ -15,7 +15,7 @@
             </div>
             {% if is_granted('ROLE_ADMIN') %}
                 <div class="ml-5 pointer-event">
-                    <a href="{{ path('admin_comment_delete', {id: comment.id}) }}">
+                    <a href="{{ path('admin_comment_delete', {id: comment.id}) }}?token={{ csrf_token('comment' ~ comment.id) }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="32" fill="currentColor"
                              class="bi bi-trash"
                              viewBox="0 0 16 16">

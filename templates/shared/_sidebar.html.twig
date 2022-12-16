@@ -1,4 +1,3 @@
-
 <nav id="sidebar">
     <ul class="list-unstyled components">
         <p>Administration</p>
@@ -14,8 +13,8 @@
             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true"
                aria-expanded="false">Commentaires</a>
             <div class="dropdown-menu bg-white ml-4" id="homeSubmenu">
-                <a class="dropdown-item" href="#">Commentaires en attentes</a>
-                <a class="dropdown-item" href="#">Commentaires validés</a>
+                <a class="dropdown-item" href="{{ path('admin_comment_unvalid') }}">Commentaires en attentes</a>
+                <a class="dropdown-item" href="{{ path('admin_comment_valid') }}">Commentaires validés</a>
                 <a class="dropdown-item" href="#">Editer/Supprimer un commentaire</a>
             </div>
         </li>
